@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<XMLDB PATH="blocks/gescompeval_md/db" VERSION="20140127" COMMENT="XMLDB file for Moodle blocks/gescompeval_md"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
+>
+  <TABLES>
+    <TABLE NAME="block_gesc_skill" COMMENT="It defines competencies/results" NEXT="block_gesc_skill_course">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="gescompevalid"/>
+        <FIELD NAME="gescompevalid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" COMMENT="ID in Gescompeval web service" PREVIOUS="id" NEXT="type"/>
+        <FIELD NAME="type" TYPE="char" LENGTH="255" NOTNULL="false" UNSIGNED="true" SEQUENCE="false" PREVIOUS="gescompevalid"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="pk_skill" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="block_gesc_skill_course" COMMENT="Connection between skill and course" PREVIOUS="block_gesc_skill" NEXT="block_gesc_subdimension">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="skillid"/>
+        <FIELD NAME="skillid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" PREVIOUS="id" NEXT="courseid"/>
+        <FIELD NAME="courseid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" PREVIOUS="skillid"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="pk_skill_course" TYPE="primary" FIELDS="id" NEXT="fk_skill_course_skill"/>
+        <KEY NAME="fk_skill_course_skill" TYPE="foreign" FIELDS="skillid" REFTABLE="block_gesc_skill" REFFIELDS="id" PREVIOUS="pk_skill_course" NEXT="fk_skill_course_course"/>
+        <KEY NAME="fk_skill_course_course" TYPE="foreign" FIELDS="courseid" REFTABLE="course" REFFIELDS="id" PREVIOUS="fk_skill_course_skill"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="block_gesc_subdimension" COMMENT="It defines subdimensions of EvalCOMIX tools" PREVIOUS="block_gesc_skill_course" NEXT="block_gesc_skill_course_subd">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="evxsubid"/>
+        <FIELD NAME="evxsubid" TYPE="char" LENGTH="255" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" PREVIOUS="id" NEXT="toolid"/>
+        <FIELD NAME="toolid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" PREVIOUS="evxsubid"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="pk_subdimension" TYPE="primary" FIELDS="id" NEXT="fk_sub_evxtool"/>
+        <KEY NAME="fk_sub_evxtool" TYPE="foreign" FIELDS="toolid" REFTABLE="block_evalcomix_tools" REFFIELDS="id" PREVIOUS="pk_subdimension"/>
+      </KEYS>
+      <INDEX NAME="ui_subdimension" TYPE="unique" FIELDS="evxsubid"/>
+    </TABLE>
+    <TABLE NAME="block_gesc_skill_course_subd" COMMENT="Connection between skill_course and subdimension" PREVIOUS="block_gesc_subdimension">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="skillcourseid"/>
+        <FIELD NAME="skillcourseid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" PREVIOUS="id" NEXT="subdimensionid"/>
+        <FIELD NAME="subdimensionid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" PREVIOUS="skillcourseid"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="pk_skill_course_sub" TYPE="primary" FIELDS="id" NEXT="fk_com_cou_sub_com_cou"/>
+        <KEY NAME="fk_com_cou_sub_com_cou" TYPE="foreign" FIELDS="skillcourseid" REFTABLE="block_gesc_skill_course" REFFIELDS="id" PREVIOUS="pk_skill_course_sub" NEXT="fk_com_cou_sub_sub"/>
+        <KEY NAME="fk_com_cou_sub_sub" TYPE="foreign" FIELDS="subdimensionid" REFTABLE="block_gesc_subdimension" REFFIELDS="id" PREVIOUS="fk_com_cou_sub_com_cou"/>
+      </KEYS>
+    </TABLE>
+  </TABLES>
+</XMLDB>
