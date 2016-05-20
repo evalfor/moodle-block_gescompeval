@@ -4,7 +4,6 @@ include_once('gescompeval_object.php');
 include_once('skill_course.php');
 include_once('ws_gescompeval_client.php');
 
-
 /**
  * Class for competencies and learning results
  *
@@ -178,7 +177,9 @@ class skill extends gescompeval_object{
 	 * @return stdClass stdClass instance with skill information or false
 	 */
 	public static function get_skill_information($skill){
-
+		/*Añadido por Daniel Cabeza*/
+		include_once('ws_gescompeval_client.php');
+		/*Fin del cambio*/
 		$obj = false;
 
 		if($skill){

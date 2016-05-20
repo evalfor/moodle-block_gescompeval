@@ -1,20 +1,10 @@
 <?php
-
-// This file is part of Moodle - http://moodle.org/
-//
-// Moodle is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// Moodle is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
-
+/**
+ * @package    block_gescompeval_md
+ * @copyright  2010 onwards EVALfor Research Group {@link http://evalfor.net/}
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @author     Daniel Cabeza Sánchez <daniel.cabeza@uca.es>
+ */
 
 /**
  * Define the complete assignment structure for backup, with file and id annotations
@@ -30,7 +20,10 @@ class backup_gescompeval_md_block_structure_step extends backup_block_structure_
 		$skill = new backup_nested_element('skill', array('id'), array('gescompevalid', 'type'));
 		$skill_courses = new backup_nested_element('skill_courses');
 		$skill_course = new backup_nested_element('skill_course', array('id'), array('skillid', 'courseid'));
-		$subdimensions = new backup_nested_element('subdimenions');
+		/*Añadido por Daniel Cabeza*/
+		//$subdimensions = new backup_nested_element('subdimenions');
+		$subdimensions = new backup_nested_element('subdimensions');
+		/*Fin del Cambio*/
 		$subdimension = new backup_nested_element('subdimension', array('id'), array('evxsubid', 'toolid'));
 		$skill_course_subs = new backup_nested_element('skill_course_subs');
 		$skill_course_sub = new backup_nested_element('skill_course_sub', array('id'), array('skillcourseid', 'subdimensionid'));
@@ -117,15 +110,21 @@ class backup_gescompeval_md_block_structure_step extends backup_block_structure_
 					SELECT *
 					FROM {block_gesc_subdimension}", $in_params);
 
-			$skill_course_sub->set_source_sql("
-					SELECT *
-					FROM {block_gesc_skill_course_subd}", $in_params);
+			
 		}
 
 		$skill->set_source_table('block_gesc_skill', array());
+		/*Añadido por Daniel Cabeza */
 		$subdimension->set_source_table('block_gesc_subdimension', array());
-		$skill_course_sub->set_source_table('block_gesc_skill_course_subd', array());
-
+		$skill_course->set_source_table('block_gesc_skill_course', array('courseid' => backup::VAR_COURSEID));
+		$skill_course_sub->set_source_sql('
+					SELECT scs.*
+					FROM {block_gesc_skill_course_subd} scs, {block_gesc_skill_course} sc, {block_gesc_subdimension} s
+                    WHERE 
+							scs.skillcourseid = sc.id 
+						AND scs.subdimensionid = s.id 
+						AND sc.courseid = ?', array(backup::VAR_COURSEID));
+		/*Fin del Cambio*/
 		//$skill_course->set_source_table('block_gesc_skill_course', array('id' => backup::VAR_PARENTID));
 		//$evalcomix_mode->set_source_table('block_evalcomix_modes', array('taskid' => backup::VAR_PARENTID));
 		//$evalcomix_modes_time->set_source_table('block_evalcomix_modes_time', array('modeid' => backup::VAR_PARENTID));

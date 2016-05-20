@@ -3,7 +3,10 @@
 global $CFG;
 include_once($CFG->dirroot . '/blocks/evalcomix/configeval.php');
 include_once($CFG->dirroot . '/blocks/gescompeval_md/confgescompeval.php');
-include_once($CFG->dirroot .'/blocks/gescompeval_md/model/curl.class.php');
+/*Añadido por Daniel Cabeza*/
+//include_once($CFG->dirroot .'/blocks/gescompeval_md/model/curl.class.php');
+include_once($CFG->dirroot .'/blocks/evalcomix/classes/curl.class.php');
+/*Fin del cambio*/
 include_once($CFG->dirroot .'/blocks/gescompeval_md/model/subdimension.php');
 
 /**

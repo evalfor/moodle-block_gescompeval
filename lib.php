@@ -178,7 +178,10 @@ abstract class competence_selector extends user_selector_base {
             $out .= implode(': ', $displayfields);
         }
         // Return the description into the title option
-        $out = ' title="'.$displayfields[1].'">'.$out;
+        /*Añadido por Daniel Cabeza*/
+        //$out = ' title="'.$displayfields[1].'">'.$out;
+        $out = ' title="'.htmlentities($displayfields[1]).'">'.htmlentities($out);
+        /*Fin del Cambio*/
         return $out;
     }
 

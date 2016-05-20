@@ -6,7 +6,10 @@ $nextpage = new moodle_url('/blocks/gescompeval_md/subdimensions/manage.php', $p
 $tools = evalcomix_tool::get_tools($courseid);
 
 // Create subdimension selector
-$subdimensionselector = new subdimension_selector('subdimensionselect', $options);
+/*Cambio añadido por Daniel Cabeza */
+//$subdimensionselector = new subdimension_selector('subdimensionselect', $options);
+$subdimensionselector = new subdimension_selector('subdimensionselect', array());
+/*Fin del Cambio*/
 $subdimensionselector->courseid = $courseid;
 
 ?>

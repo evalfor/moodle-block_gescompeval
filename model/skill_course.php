@@ -3,8 +3,9 @@
 include_once('gescompeval_object.php');
 include_once('skill.php');
 include_once('skill_course_sub.php');
-include_once('ws_gescompeval_client.php');
-
+/*Añadido por Daniel Cabeza*/
+//include_once('ws_gescompeval_client.php');
+/*Fin del cambio*/
 /**
  * Class for connecting competencies/results and courses
  *
