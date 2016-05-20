@@ -69,7 +69,9 @@ $string['nocompetencetypereport'] = 'The competency doesn\'t have a related type
 $string['admindescription'] = 'Configure your Gescompeval server settings. Make <strong>sure</strong> that the values you enter here are right. Otherwise the integration might not work.';
 $string['adminheader'] = 'Gescompeval server configuration';
 $string['serverurl'] = 'Gescompeval server URL:';
-$string['serverurlinfo'] = 'Here you need to enter the URL for your Gescompeval server. ie: http://localhost/Gescompeval';
+/*Cambio añadido por Daniel Cabeza: /web/app.php*/
+$string['serverurlinfo'] = 'Here you need to enter the URL for your Gescompeval server. ie: http://localhost/Gescompeval/web/app.php';
+/*Fin del cambio*/
 $string['warning'] = 'WARNING';
 $string['warningevalcomix'] = 'EVALCOMIX IS NOT INSTALLED, SO THE MOST OF THE OPTIONS OF GESCOMPEVAL WILL NOT RUN.';
 

@@ -67,7 +67,9 @@ $string['nocompetencetypereport'] = 'La competencia no tiene tipo asociado';
 $string['admindescription'] = 'Configura las opciones del servidor de Gescompeval. Asegúrate de que los datos sean correctos. En otro caso la integración no funcionará';
 $string['adminheader'] = 'Configuración de Gescompeval';
 $string['serverurl'] = 'URL del servidor de Gescompeval:';
-$string['serverurlinfo'] = 'Introduce la URL de tu servidor Gescompeval. Ej: http://localhost/Gescompeval';
+/*Cambio añadido por Daniel Cabeza: /web/app.php*/
+$string['serverurlinfo'] = 'Introduce la URL de tu servidor Gescompeval. Ej: http://localhost/Gescompeval/web/app.php';
+/*Fin del cambio*/
 $string['warning'] = 'AVISO';
 $string['warningevalcomix'] = 'EVALCOMIX NO ESTÁ INSTALADO, POR LO QUE LA MAYORÍA DE LAS OPCIONES DE GESCOMPEVAL NO FUNCIONARÁN.';
 
