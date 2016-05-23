@@ -27,7 +27,7 @@ class restore_gescompeval_md_block_structure_step extends restore_structure_step
         $data = (object)$data;
 		$oldid = $data->id;
 		
-		if(!skill::fetch(array('gescompevalid' => $data->gescompevalid))){echo "dentroooo";
+		if(!skill::fetch(array('gescompevalid' => $data->gescompevalid))){
 			$newitemid = $DB->insert_record('block_gesc_skill', $data);
 			$this->set_mapping('skill', $oldid, $newitemid);
 		}
@@ -55,7 +55,7 @@ class restore_gescompeval_md_block_structure_step extends restore_structure_step
 		}
     }
     
-    public function process_gescompeval_md_subdimension($data) {echo "dentro4";
+    public function process_gescompeval_md_subdimension($data) {
         global $DB, $CFG;
 		include_once($CFG->dirroot . '/blocks/gescompeval_md/model/subdimension.php');
 		
@@ -71,7 +71,7 @@ class restore_gescompeval_md_block_structure_step extends restore_structure_step
 		}
     }
     
-    public function process_gescompeval_md_skill_course_sub($data) {echo "dentro5";
+    public function process_gescompeval_md_skill_course_sub($data) {
         global $DB, $CFG;
 		include_once($CFG->dirroot . '/blocks/gescompeval_md/model/skill_course_sub.php');
 		
@@ -160,7 +160,7 @@ class restore_gescompeval_md_block_structure_step extends restore_structure_step
 						if(!empty($newtool) && !$subdimension_new = subdimension::fetch(array('toolid' => $newtool->newitemid, 'evxsubid' => $evxsubid_new))){
 							$subdimension_new = new subdimension('', $evxsubid_new, $newtool->newitemid);
 							if(!$subdimensionid_new = $subdimension_new->insert()){
-								echo "Esta subdimensión no se ha guardado";exit;
+								echo "Esta subdimensión no se ha guardado";
 							}
 						
 							if(!empty($subdimension['id'])){

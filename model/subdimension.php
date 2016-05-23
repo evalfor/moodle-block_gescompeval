@@ -168,7 +168,6 @@ class subdimension extends gescompeval_object{
 
 		// Checking if the evalcomix tool exists before inserting
 		$evxtool = $DB->get_record('block_evalcomix_tools', array('id'=>$this->toolid));
-print_r($evxtool);
 
 		if($evxtool){
 			$this->id = parent::insert();
