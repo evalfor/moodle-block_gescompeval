@@ -24,7 +24,7 @@ class backup_gescompeval_md_block_structure_step extends backup_block_structure_
 		//$subdimensions = new backup_nested_element('subdimenions');
 		$subdimensions = new backup_nested_element('subdimensions');
 		/*Fin del Cambio*/
-		$subdimension = new backup_nested_element('subdimension', array('id'), array('evxsubid', 'toolid'));
+		$subdimension = new backup_nested_element('subdimension', array('id'), array('evxsubid', 'toolid', 'level'));
 		$skill_course_subs = new backup_nested_element('skill_course_subs');
 		$skill_course_sub = new backup_nested_element('skill_course_sub', array('id'), array('skillcourseid', 'subdimensionid'));
 
@@ -93,7 +93,7 @@ class backup_gescompeval_md_block_structure_step extends backup_block_structure_
 		 (object)array('one' => 11, 'two' => 22, 'three' => 33))); // 2 object array*/
 
 		//$evalcomix_tool->set_source_table('block_evalcomix_tools', array('evxid' => backup::VAR_PARENTID));
-
+		
 
 		if(!empty($in_params)){
 
@@ -115,7 +115,19 @@ class backup_gescompeval_md_block_structure_step extends backup_block_structure_
 
 		$skill->set_source_table('block_gesc_skill', array());
 		/*Añadido por Daniel Cabeza */
-		$subdimension->set_source_table('block_gesc_subdimension', array());
+		//$subdimension->set_source_table('block_gesc_subdimension', array());
+		
+		include_once($CFG->dirroot . '/blocks/gescompeval_md/model/subdimension.php');
+		$all_subdimensions = subdimension::fetch_all(array());
+		if(!empty($all_subdimensions)){
+			$array = array();
+			foreach($all_subdimensions as $sub){
+				$level = $this->get_level($sub->get_toolid(), $sub->get_evxsubid());
+				$array[] = (object)array('id' => $sub->get_id(), 'evxsubid' => $sub->get_evxsubid(), 'toolid' => $sub->get_toolid(), 'level' => $level);
+			}
+			$subdimension->set_source_array($array);
+		}
+		
 		$skill_course->set_source_table('block_gesc_skill_course', array('courseid' => backup::VAR_COURSEID));
 		$skill_course_sub->set_source_sql('
 					SELECT scs.*
@@ -135,5 +147,54 @@ class backup_gescompeval_md_block_structure_step extends backup_block_structure_
 
 		return $this->prepare_block_structure($gescompeval);
 
+	}
+	
+	function get_level($toolid, $subdimensionid){
+		global $CFG;
+		require_once($CFG->dirroot.'/blocks/evalcomix/classes/evalcomix_tool.php');
+		$i = 0; //tool index (for mixed tool)
+		$j = 0; //dimension index
+		$k = 0; //subdimension index
+		$l = 0; //attribute index (for differential tool
+		if($tool = evalcomix_tool::fetch(array('id'=>$toolid))){
+			include_once($CFG->dirroot . '/blocks/gescompeval_md/model/ws_evalcomix_client.php');
+			if($tool->type == 'mixed'){
+				$mixtools = ws_evalcomix_client::get_tools_mixed($tool->idtool);//print_r($mixtools);
+				foreach ($mixtools as $dimensions){
+					foreach ($dimensions as $dimname => $subdimensions){
+						foreach ($subdimensions as $id => $name){
+							if($id == $subdimensionid){
+								return $i.'/'. $k . '/' . $j .'/' . $l;
+							}
+							$k++;
+						}
+						$j++;
+					}
+					$i++;
+				}
+			}
+			elseif ($tool->type == 'differential'){
+				$attributes = ws_evalcomix_client::get_attributes_differential($tool->idtool);
+				foreach ($attributes as $id => $name){
+					if($id == $subdimensionid){
+						return $i.'/'. $k . '/' . $j .'/' . $l;
+					}
+					++$l;
+				}
+			}
+			else{
+				$dimensions = ws_evalcomix_client::get_dimensions($tool->idtool);
+				foreach ($dimensions as $dimname => $subdimensions){
+					foreach ($subdimensions as $id => $name){
+						if($id == $subdimensionid){
+							return $i.'/'. $k . '/' . $j .'/' . $l;
+						}
+						$k++;
+					}
+					$j++;
+				}
+			}
+		}
+		return '';
 	}
 }

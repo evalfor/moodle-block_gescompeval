@@ -155,6 +155,17 @@ class restore_gescompeval_md_block_structure_step extends restore_structure_step
 							}
 						}
 					}
+					else{
+						$level = (string)$subdimension->level;
+						if(!empty($level)){
+							$exp_level = explode('/', $level);
+							$key_tool = $exp_level[0];
+							$key_dim = $exp_level[1];
+							$key_sub = $exp_level[2];
+							$key_att = $exp_level[3];
+							$evxsubid_new = $elements_new[$key_tool][$key_dim][$key_sub][$key_att];
+						}
+					}
 						
 					if(isset($evxsubid_new)){
 						if(!empty($newtool) && !$subdimension_new = subdimension::fetch(array('toolid' => $newtool->newitemid, 'evxsubid' => $evxsubid_new))){
