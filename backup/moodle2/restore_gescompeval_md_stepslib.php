@@ -26,13 +26,13 @@ class restore_gescompeval_md_block_structure_step extends restore_structure_step
 		
         $data = (object)$data;
 		$oldid = $data->id;
-		
-		if(!skill::fetch(array('gescompevalid' => $data->gescompevalid))){
+		$skill = skill::fetch(array('gescompevalid' => $data->gescompevalid));
+		if(empty($skill)){
 			$newitemid = $DB->insert_record('block_gesc_skill', $data);
 			$this->set_mapping('skill', $oldid, $newitemid);
 		}
 		else{
-			$this->set_mapping('skill', $oldid, $oldid);
+			$this->set_mapping('skill', $oldid, $skill->get_id());
 		}
 		
     }
@@ -155,9 +155,10 @@ class restore_gescompeval_md_block_structure_step extends restore_structure_step
 							}
 						}
 					}
-					else{
+					
+					if(empty($evxsubid_new)){
 						$level = (string)$subdimension->level;
-						if(!empty($level)){
+						if(isset($level)){
 							$exp_level = explode('/', $level);
 							$key_tool = $exp_level[0];
 							$key_dim = $exp_level[1];
@@ -167,7 +168,7 @@ class restore_gescompeval_md_block_structure_step extends restore_structure_step
 						}
 					}
 						
-					if(isset($evxsubid_new)){
+					if(!empty($evxsubid_new)){
 						if(!empty($newtool) && !$subdimension_new = subdimension::fetch(array('toolid' => $newtool->newitemid, 'evxsubid' => $evxsubid_new))){
 							$subdimension_new = new subdimension('', $evxsubid_new, $newtool->newitemid);
 							if(!$subdimensionid_new = $subdimension_new->insert()){
