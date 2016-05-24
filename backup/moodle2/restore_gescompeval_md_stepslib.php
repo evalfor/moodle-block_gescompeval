@@ -26,13 +26,13 @@ class restore_gescompeval_md_block_structure_step extends restore_structure_step
 		
         $data = (object)$data;
 		$oldid = $data->id;
-		
-		if(!skill::fetch(array('gescompevalid' => $data->gescompevalid))){
+		$skill = skill::fetch(array('gescompevalid' => $data->gescompevalid));
+		if(empty($skill)){
 			$newitemid = $DB->insert_record('block_gesc_skill', $data);
 			$this->set_mapping('skill', $oldid, $newitemid);
 		}
 		else{
-			$this->set_mapping('skill', $oldid, $oldid);
+			$this->set_mapping('skill', $oldid, $skill->get_id());
 		}
 		
     }
